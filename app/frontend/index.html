@@ -111,6 +111,9 @@
         <p>Find your favourite products at great prices.</p>
     </section>
 
+       <p id="cart-count">Cart: 0</p>
+      <div id="cart-items"></div>
+       <p id="cart-total">Total: ₹0</p>
     <section class="products">
         <h2>Our Products</h2>
         <div id="product-list">Loading products...</div>
@@ -142,8 +145,8 @@
                             <p>${product.description}</p>
                             <p class="price">₹${product.price}</p>
                             <p class="stock">Stock: ${product.stock}</p>
-                            <button onclick="alert('Cart feature coming soon!')">
-                                Add to Cart
+                            <button onclick="addToCart('${product.name}',${product.price})">
+                              Add to Cart   
                             </button>
                         </div>
                     `;
@@ -155,7 +158,40 @@
             }
         }
 
-        loadProducts();
+
+
+let cart = [];
+
+
+function addToCart(productName, price) {
+    cart.push({ name: productName, price: price });
+    updateCart();
+    alert(productName + " added to cart!");
+}
+
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    updateCart();
+}
+
+function updateCart() {
+    document.getElementById("cart-count").innerText =
+        "Cart: " + cart.length;
+
+    document.getElementById("cart-items").innerHTML =
+        cart.map((item, i) =>
+            `<p>${item.name} - ₹${item.price}
+            <button onclick="removeFromCart(${i})">Remove</button></p>`
+        ).join("");
+
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+    document.getElementById("cart-total").innerText =
+        "Total: ₹" + total;
+}
+
+
+    loadProducts();
     </script>
 
 </body>
